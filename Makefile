@@ -14,3 +14,9 @@ endif
 
 %:
 	+$(MAKE) -C $(QMK_FIRMWARE_ROOT) $(MAKECMDGOALS) QMK_USERSPACE=$(QMK_USERSPACE)
+
+
+.PHONY: setup
+setup:
+	qmk setup -H "$PWD/qmk_firmware" -y
+
