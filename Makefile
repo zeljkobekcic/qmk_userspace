@@ -20,3 +20,5 @@ endif
 setup:
 	qmk setup -H "$PWD/qmk_firmware" -y
 
+totem_zeljkobekcic.uf2:
+	qmk compile -kb totem -km zeljkobekcic
