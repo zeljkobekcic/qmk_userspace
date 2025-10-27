@@ -4,6 +4,8 @@
 
 #define LA_SYM MO(SYM)
 #define LA_NAV MO(NAV)
+#define CTRL_PGDN LCTL(KC_PGDN)
+#define CTRL_PGUP LCTL(KC_PGUP)
 
 enum layers { BASE = 0, NAV, SYM, NUM, ADJ };
 
@@ -25,10 +27,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [NAV] = LAYOUT(
-               KC_TAB,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_HOME, KC_END,  KC_BSPC, KC_DEL,
-               OS_SHFT, OS_CTRL, OS_ALT,  OS_GUI,  KC_NO,   KC_NO,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
-        KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_PGDN, KC_PGUP, KC_NO,   KC_NO,
-                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+               KC_TAB,  CTRL_PGUP, CTRL_PGDN, KC_NO,   KC_NO,   KC_NO,   KC_HOME, KC_END,  KC_BSPC, KC_DEL,
+               OS_SHFT, OS_CTRL,   OS_ALT,    OS_GUI,  KC_NO,   KC_NO,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
+        KC_NO, KC_NO,   KC_COPY,   KC_PASTE,  KC_CUT,  KC_NO,   KC_NO,   KC_NO,   KC_PGDN, KC_PGUP, KC_NO,   KC_NO,
+                                   KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
 
     [SYM] = LAYOUT(
@@ -100,4 +102,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, SYM, NAV, NUM);
 }
-
