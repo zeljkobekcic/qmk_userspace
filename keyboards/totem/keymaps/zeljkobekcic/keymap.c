@@ -33,7 +33,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [NAV] = LAYOUT(
                KC_TAB,   _OS_TAB_LEFT, _OS_TAB_RIGHT, KC_NO,   KC_NO,   KC_NO,   KC_HOME, KC_END,  KC_BSPC, KC_DEL,
-               _OS_SHFT, _OS_CTRL,     _OS_ALT,       _OS_GUI, _OS_GAC,   KC_NO,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
+               _OS_SHFT, _OS_CTRL,     _OS_ALT,       _OS_GUI, _OS_GAC, KC_NO,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
         KC_NO, KC_NO,    KC_COPY,      KC_PASTE,      KC_CUT,  KC_NO,   KC_NO,   KC_NO,   KC_PGDN, KC_PGUP, KC_NO,   KC_NO,
                                        KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
