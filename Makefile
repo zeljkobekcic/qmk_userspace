@@ -1,6 +1,17 @@
 .SILENT:
 
+
 MAKEFLAGS += --no-print-directory
+
+UNAME_S := $(shell uname -s)
+QMKFMT_VERSION := v0.2.0
+ifeq ($(UNAME_S),Darwin)
+	QMKFMT_RELEASE := https://github.com/rcorre/qmkfmt/releases/download/$(QMKFMT_VERSION)/qmkfmt-$(QMKFMT_VERSION)-macos.tar.xz
+endif
+
+ifeq ($(UNAME_S),Linux)
+	QMKFMT_RELEASE := https://github.com/rcorre/qmkfmt/releases/download/$(QMKFMT_VERSION)/qmkfmt-$(QMKFMT_VERSION)-linux.tar.xz
+endif
 
 QMK_USERSPACE := $(patsubst %/,%,$(dir $(shell realpath "$(lastword $(MAKEFILE_LIST))")))
 ifeq ($(QMK_USERSPACE),)
@@ -20,5 +31,17 @@ endif
 setup:
 	qmk setup -H "$PWD/qmk_firmware" -y
 
-totem_zeljkobekcic.uf2:
+.PHONY: totem
+totem:
 	qmk compile -kb totem -km zeljkobekcic
+
+.PHONY: setup_hack
+setup_hack:
+	wget "https://github.com/rcorre/qmkfmt/releases/download/v0.2.0/qmkfmt-v0.2.0-macos.tar.xz" --output-document ./hack/qmkfmt.tar.xz
+	tar -xf ./hack/qmkfmt.tar.xz --directory hack
+	rm ./hack/qmkfmt.tar.xz
+	chmod +x ./hack/qmkfmt
+
+.PHONY:
+format:
+	./hack/qmkfmt ./keyboards/totem/keymaps/zeljkobekcic/keymap.c

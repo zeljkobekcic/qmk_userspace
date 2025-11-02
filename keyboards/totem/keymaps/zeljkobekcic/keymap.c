@@ -1,20 +1,25 @@
 #include QMK_KEYBOARD_H
-#include "totem.h"
 #include "oneshot.h"
+#include "osspecifickey.h"
 
 #define LA_SYM MO(SYM)
 #define LA_NAV MO(NAV)
-#define CTRL_PGDN LCTL(KC_PGDN)
-#define CTRL_PGUP LCTL(KC_PGUP)
+#define TAB_LEFT_LINUX LCTL(KC_PGDN)
+#define TAB_RIGHT_LINUX LCTL(KC_PGUP)
+#define TAB_LEFT_MACOS LALT(LGUI(KC_LEFT))
+#define TAB_RIGHT_MACOS LALT(LGUI(KC_RIGHT))
 
-enum layers { BASE = 0, NAV, SYM, NUM, ADJ };
+enum layers { BASE, NAV, SYM, NUM, ADJ };
 
 enum keycodes {
-    OS_SHFT = SAFE_RANGE,
-    OS_CTRL,
-    OS_ALT,
-    OS_RALT,
-    OS_GUI,
+    _OS_SHFT = SAFE_RANGE,
+    _OS_CTRL,
+    _OS_ALT,
+    _OS_RALT,
+    _OS_GUI,
+    _OS_GAC, // GUI + ALT + CTRL
+    _OS_TAB_LEFT,
+    _OS_TAB_RIGHT,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -27,24 +32,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [NAV] = LAYOUT(
-               KC_TAB,  CTRL_PGUP, CTRL_PGDN, KC_NO,   KC_NO,   KC_NO,   KC_HOME, KC_END,  KC_BSPC, KC_DEL,
-               OS_SHFT, OS_CTRL,   OS_ALT,    OS_GUI,  KC_NO,   KC_NO,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
-        KC_NO, KC_NO,   KC_COPY,   KC_PASTE,  KC_CUT,  KC_NO,   KC_NO,   KC_NO,   KC_PGDN, KC_PGUP, KC_NO,   KC_NO,
-                                   KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+               KC_TAB,   _OS_TAB_LEFT, _OS_TAB_RIGHT, KC_NO,   KC_NO,   KC_NO,   KC_HOME, KC_END,  KC_BSPC, KC_DEL,
+               _OS_SHFT, _OS_CTRL,     _OS_ALT,       _OS_GUI, _OS_GAC,   KC_NO,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
+        KC_NO, KC_NO,    KC_COPY,      KC_PASTE,      KC_CUT,  KC_NO,   KC_NO,   KC_NO,   KC_PGDN, KC_PGUP, KC_NO,   KC_NO,
+                                       KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
 
     [SYM] = LAYOUT(
-               KC_ESC,  KC_DLR,  KC_PERC, KC_LPRN, KC_RPRN, KC_CIRC, KC_TILD, KC_GRV,  KC_PIPE, KC_BSLS,
-               KC_MINS, KC_PLUS, KC_EQL,  KC_LCBR, KC_RCBR, KC_HASH, OS_GUI,  OS_ALT,  OS_CTRL, OS_SHFT,
-        KC_NO, KC_UNDS, KC_ASTR, KC_AT,   KC_LBRC, KC_RBRC, KC_NO,   KC_AMPR, KC_SCLN, KC_COLN, KC_EXLM, KC_NO,
+               KC_ESC,  KC_DLR,  KC_PERC, KC_LPRN, KC_RPRN, KC_CIRC, KC_TILD, KC_GRV,  KC_PIPE,  KC_BSLS,
+               KC_MINS, KC_PLUS, KC_EQL,  KC_LCBR, KC_RCBR, KC_HASH, _OS_GUI, _OS_ALT, _OS_CTRL, _OS_SHFT,
+        KC_NO, KC_UNDS, KC_ASTR, KC_AT,   KC_LBRC, KC_RBRC, KC_NO,   KC_AMPR, KC_SCLN, KC_COLN,  KC_EXLM,  KC_NO,
                                  KC_TRNS, KC_TRNS, MO(ADJ), KC_TRNS, KC_TRNS, KC_TRNS
     ),
 
     [NUM] = LAYOUT(
-               KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
-               OS_SHFT, OS_CTRL, OS_ALT,  OS_GUI,  KC_F11,  KC_F12,  OS_GUI,  OS_RALT, OS_CTRL, OS_SHFT,
-        KC_NO, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_NO,
-                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+               KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,     KC_9,     KC_0,
+               _OS_SHFT, _OS_CTRL, _OS_ALT, _OS_GUI, KC_F11,  KC_F12,  _OS_GUI, _OS_RALT, _OS_CTRL, _OS_SHFT,
+        KC_NO, KC_F1,    KC_F2,    KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,    KC_F9,    KC_F10,   KC_NO,
+                                   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
 
     [ADJ] = LAYOUT(
@@ -72,11 +77,12 @@ bool is_oneshot_ignored_key(uint16_t keycode) {
         case LA_SYM:
         case LA_NAV:
         case KC_LSFT:
-        case OS_SHFT:
-        case OS_CTRL:
-        case OS_ALT:
-        case OS_RALT:
-        case OS_GUI:
+        case _OS_SHFT:
+        case _OS_CTRL:
+        case _OS_ALT:
+        case _OS_RALT:
+        case _OS_GUI:
+        case _OS_GAC:
             return true;
         default:
             return false;
@@ -90,11 +96,24 @@ oneshot_state os_ralt_state = os_up_unqueued;
 oneshot_state os_gui_state  = os_up_unqueued;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    update_oneshot(&os_shft_state, KC_LSFT, OS_SHFT, keycode, record);
-    update_oneshot(&os_ctrl_state, KC_LCTL, OS_CTRL, keycode, record);
-    update_oneshot(&os_alt_state, KC_LALT, OS_ALT, keycode, record);
-    update_oneshot(&os_ralt_state, KC_RALT, OS_RALT, keycode, record);
-    update_oneshot(&os_gui_state, KC_LGUI, OS_GUI, keycode, record);
+    update_oneshot(&os_shft_state, KC_LSFT, _OS_SHFT, keycode, record);
+    update_oneshot(&os_ctrl_state, KC_LCTL, _OS_CTRL, keycode, record);
+    update_oneshot(&os_alt_state, KC_LALT, _OS_ALT, keycode, record);
+    update_oneshot(&os_ralt_state, KC_RALT, _OS_RALT, keycode, record);
+    update_oneshot(&os_gui_state, KC_LGUI, _OS_GUI, keycode, record);
+
+    switch (keycode) {
+        case _OS_TAB_LEFT:
+            return process_os_specific_key(record, TAB_LEFT_MACOS, TAB_LEFT_LINUX);
+
+        case _OS_TAB_RIGHT:
+            return process_os_specific_key(record, TAB_RIGHT_MACOS, TAB_RIGHT_LINUX);
+
+        case _OS_GAC:
+            update_oneshot(&os_ctrl_state, KC_LCTL, _OS_CTRL, keycode, record);
+            update_oneshot(&os_alt_state, KC_LALT, _OS_ALT, keycode, record);
+            update_oneshot(&os_gui_state, KC_LGUI, _OS_GUI, keycode, record);
+    }
 
     return true;
 }
@@ -102,3 +121,4 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, SYM, NAV, NUM);
 }
+
