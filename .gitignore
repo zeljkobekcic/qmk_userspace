@@ -1,5 +1,7 @@
 qmk_firmware
 
+hack/qmkfmt
+
 # Junk files
 *.bak
 *.swp
