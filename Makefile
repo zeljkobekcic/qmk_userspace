@@ -32,6 +32,11 @@ endif
 setup:
 	qmk setup -H "$PWD/qmk_firmware" -y
 
+.PHONY: setup-totem
+setup-totem:
+	git clone git@github.com:zeljkobekcic/qmk-config-totem.git qmk_firmware/keyboards/totem
+
+
 .PHONY: mytotem
 mytotem:
 	qmk compile -kb totem -km zeljkobekcic
