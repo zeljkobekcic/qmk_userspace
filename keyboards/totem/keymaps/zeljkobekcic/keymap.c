@@ -6,8 +6,8 @@
 #define LA_NAV MO(NAV)
 #define LA_NUM MO(NUM)
 #define LA_FUN MO(FUN)
-#define TAB_LEFT_LINUX LCTL(KC_PGDN)
-#define TAB_RIGHT_LINUX LCTL(KC_PGUP)
+#define TAB_LEFT_LINUX LCTL(KC_PGUP)
+#define TAB_RIGHT_LINUX LCTL(KC_PGDN)
 #define TAB_LEFT_MACOS LALT(LGUI(KC_LEFT))
 #define TAB_RIGHT_MACOS LALT(LGUI(KC_RIGHT))
 
@@ -34,17 +34,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [NAV] = LAYOUT(
-               KC_TAB,   _OS_TAB_LEFT, _OS_TAB_RIGHT, KC_NO,   KC_NO,   KC_NO,   KC_HOME, KC_END,  KC_BSPC, KC_DEL,
-               _OS_SHFT, _OS_CTRL,     _OS_ALT,       _OS_GUI, _OS_GAC, KC_NO,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
-        KC_NO, KC_NO,    KC_COPY,      KC_PASTE,      KC_CUT,  KC_NO,   KC_NO,   KC_NO,   KC_PGDN, KC_PGUP, KC_NO,   KC_NO,
-                                       KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS, LA_NUM,  KC_TRNS
+               KC_TAB,   _OS_TAB_LEFT, _OS_TAB_RIGHT, KC_NO,   KC_NO,   KC_NO,  KC_HOME, KC_END,  KC_BSPC, KC_DEL,
+               _OS_SHFT, _OS_CTRL,     _OS_ALT,       _OS_GUI, _OS_GAC, KC_NO,  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
+        KC_NO, KC_NO,    KC_COPY,      KC_PASTE,      KC_CUT,  KC_NO,   KC_NO,  KC_NO,   KC_PGDN, KC_PGUP, KC_NO,   KC_NO,
+                                       KC_TRNS,       KC_TRNS, KC_TRNS, LA_FUN, LA_NUM,  KC_TRNS
     ),
 
     [SYM] = LAYOUT(
                KC_ESC,  KC_DLR,  KC_PERC, KC_LPRN, KC_RPRN, KC_CIRC, KC_TILD, KC_GRV,  KC_PIPE,  KC_BSLS,
                KC_MINS, KC_PLUS, KC_EQL,  KC_LCBR, KC_RCBR, KC_HASH, _OS_GUI, _OS_ALT, _OS_CTRL, _OS_SHFT,
         KC_NO, KC_UNDS, KC_ASTR, KC_AT,   KC_LBRC, KC_RBRC, KC_NO,   KC_AMPR, KC_SCLN, KC_COLN,  KC_EXLM,  KC_NO,
-                                 KC_TRNS, LA_FUN,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
+                                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
 
     [NUM] = LAYOUT(
